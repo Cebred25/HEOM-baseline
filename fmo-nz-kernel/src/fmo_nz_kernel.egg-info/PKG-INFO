@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: fmo-nz-kernel
+Version: 0.1.0
+Summary: Non‑Markovian kernel toolkit for FMO models
+Author: 
+License: MIT
+Description-Content-Type: text/markdown
+Requires-Dist: numpy
+Requires-Dist: scipy
+Requires-Dist: matplotlib
+Requires-Dist: toml

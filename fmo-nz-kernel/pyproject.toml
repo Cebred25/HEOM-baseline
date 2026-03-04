@@ -1,0 +1,17 @@
+[project]
+name = "fmo-nz-kernel"
+version = "0.1.0"
+description = "Non‑Markovian kernel toolkit for FMO models"
+authors = [ { name = "" } ]
+readme = "README.md"
+license = { text = "MIT" }
+dependencies = [
+    "numpy",
+    "scipy",
+    "matplotlib",
+    "toml",
+]
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
