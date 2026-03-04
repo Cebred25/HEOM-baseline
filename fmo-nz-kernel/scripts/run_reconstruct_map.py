@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-"""Script to reconstruct dynamical maps from data."""
-
-def main():
-    print("Reconstruct map stub")
-
-
-if __name__ == "__main__":
-    main()
-=======
 """Script to reconstruct dynamical maps from a configuration file.
 
 This driver executes the first stage of the pipeline: given a Hamiltonian
@@ -56,10 +46,10 @@ def main(argv=None):
         heom = DummyHEOM(cfg.bath, d)
     else:
         try:
-            from fmonz.solvers.heom_quutip import QuTiPHEOM
+            from fmonz.solvers.heom_quutip import QuTiPHEOMSolver
         except ImportError:
             raise RuntimeError("QuTiP is not available; re-run with --use-dummy")
-        heom = QuTiPHEOM(H, cfg.bath)
+        heom = QuTiPHEOMSolver(H, cfg.bath, tlist=times)
 
     from fmonz.utils.basis import operator_basis
 
@@ -78,4 +68,3 @@ def main(argv=None):
 
 if __name__ == "__main__":
     main()
->>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)

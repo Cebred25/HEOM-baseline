@@ -58,8 +58,7 @@ n_steps = 5
         text=True,
     )
     assert proc.returncode == 0, proc.stderr
-<<<<<<< HEAD
-=======
+    assert proc.returncode == 0, proc.stderr
 
     # also try with the QuTiP backend if available; it should produce the
     # same set of output files (the dynamics are trivial given the toy
@@ -87,7 +86,6 @@ n_steps = 5
             "validation_report.json",
         ]:
             assert (outdir2 / fname).exists(), f"missing {fname}"
->>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
     # expected outputs
     for fname in [
         "Lambda.npz",
@@ -99,8 +97,6 @@ n_steps = 5
         "kernel_norm.png",
     ]:
         assert (outdir / fname).exists(), f"missing {fname}"
-<<<<<<< HEAD
-=======
 
 
 def run_script(script, cfgfile, tmp_path):
@@ -153,4 +149,3 @@ def test_smoke_script(tmp_path):
         text=True,
     )
     assert proc.returncode == 0, proc.stderr
->>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)

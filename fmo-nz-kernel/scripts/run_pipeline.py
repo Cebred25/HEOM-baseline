@@ -87,20 +87,13 @@ def main(argv: list[str] | None = None) -> None:
     if args.use_dummy:
         heom = DummyHEOM(cfg.bath, d)
     else:
-<<<<<<< HEAD
-        # placeholder for a real solver; user should replace this block
-        raise RuntimeError(
-            "No HEOM backend specified; rerun with --use-dummy or implement a solver"
-        )
-=======
         try:
-            from fmonz.solvers.heom_quutip import QuTiPHEOM
+            from fmonz.solvers.heom_quutip import QuTiPHEOMSolver
         except ImportError as exc:  # pragma: no cover - optional dependency
             raise RuntimeError(
                 "QuTiP backend requested but qutip is not installed"
             ) from exc
-        heom = QuTiPHEOM(H, cfg.bath)
->>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
+        heom = QuTiPHEOMSolver(H, cfg.bath, tlist=times)
 
     basis = operator_basis(d, kind="matrix")
     Lambda = reconstruct_dynamical_map(heom, basis, times)
