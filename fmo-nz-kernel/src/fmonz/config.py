@@ -41,11 +41,48 @@ class SystemConfig:
 
 @dataclass
 class BathParams:
+<<<<<<< HEAD
+=======
+    """Parameters describing a bosonic bath used by HEOM solvers.
+
+    The naming follows the convention in the QuTiP documentation when
+    possible.  Older code in the repository still refers to the more
+    verbose names ``temperature``, ``reorg_energy`` and ``cutoff``; those
+    fields are retained for backwards compatibility.  The additional
+    options are used only by the QuTiP backend.
+
+    Attributes
+    ----------
+    temperature
+        Bath temperature (we work in units where $k_B=1$).
+    reorg_energy
+        Reorganization energy \(\lambda\).
+    cutoff
+        Drude–Lorentz cutoff frequency \(\gamma\).
+    hierarchy_depth
+        Maximum hierarchy depth to include in the HEOM.
+    matsubara_terms
+        Number of Matsubara or P\"ade expansion terms (``Nk`` in
+        QuTiP parlance).
+    use_pade
+        If ``True`` use a P\"ade expansion for the bath correlation
+        function instead of the Matsubara series.  Default ``False``.
+    add_terminator
+        Whether to include the approximate terminator correction when the
+        hierarchy is truncated.  Default ``True``.
+    """
+
+>>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
     temperature: float
     reorg_energy: float
     cutoff: float
     hierarchy_depth: int
     matsubara_terms: int = 0
+<<<<<<< HEAD
+=======
+    use_pade: bool = False
+    add_terminator: bool = True
+>>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
 
 
 
@@ -101,6 +138,11 @@ def load_config(path: str) -> FullConfig:
             cutoff=float(bath["cutoff"]),
             hierarchy_depth=int(bath["hierarchy_depth"]),
             matsubara_terms=int(bath.get("matsubara_terms", 0)),
+<<<<<<< HEAD
+=======
+            use_pade=bool(bath.get("use_pade", False)),
+            add_terminator=bool(bath.get("add_terminator", True)),
+>>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
         ),
         time=TimeGrid(
             dt=float(time["dt"]),

@@ -235,7 +235,18 @@ Helper functions in ``fmonz.utils.io`` (`save_npz`, `save_report`) tidy the
 file‑format conventions and make it easy to extend or repurpose the script.
 
 The driver currently defaults to a trivial ``DummyHEOM`` solver; replace or
+<<<<<<< HEAD
 wrap it with a production backend to process real HEOM data.
+=======
+wrap it with a production backend to process real HEOM data.  An
+optional QuTiP-based adapter is provided in
+``src/fmonz/solvers/heom_quutip.py``; install it with ``pip install
+.\[heom\]`` and rerun the scripts without ``--use-dummy`` to exercise the
+real solver.  A lightweight smoke test driver
+(``scripts/run_heom_smoke.py``) and several example configuration files
+(``examples/*.toml``) demonstrate the three tiers described in the
+project instructions (smoke test, short FMO map, and full kernel extraction).
+>>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
 
 ---
 

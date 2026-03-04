@@ -1,0 +1,15 @@
+[system]
+d = 3
+site_energies = [0.0, 0.0, 0.0]
+couplings = [[0.0, 0.1, 0.0], [0.1, 0.0, 0.1], [0.0, 0.1, 0.0]]
+
+[bath]
+temperature = 1.0
+reorganization_energy = 0.1
+cutoff = 1.0
+hierarchy_depth = 2
+matsubara_terms = 0
+
+[time]
+dt = 0.05
+n_steps = 201

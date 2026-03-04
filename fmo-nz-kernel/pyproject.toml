@@ -12,6 +12,12 @@ dependencies = [
     "toml",
 ]
 
+<<<<<<< HEAD
+=======
+[project.optional-dependencies]
+heom = ["qutip>=5.0"]
+
+>>>>>>> b1437fe (Add FMO NZ kernel scripts and update packaging metadata)
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"

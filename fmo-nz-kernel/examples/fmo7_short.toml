@@ -1,0 +1,24 @@
+[system]
+d = 7
+site_energies = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+# simple nearest-neighbour couplings for demonstration
+couplings = [
+  [0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+  [1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0],
+  [0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0],
+  [0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0],
+  [0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0],
+  [0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0],
+  [0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+]
+
+[bath]
+temperature = 300.0
+reorganization_energy = 35.0
+cutoff = 50.0
+hierarchy_depth = 3
+matsubara_terms = 1
+
+[time]
+dt = 0.1
+n_steps = 301
