@@ -221,40 +221,18 @@ def enforce_constraints_on_kernel(
         else:
             raise ValueError(f"unknown smoothing method {smooth.get('method')}")
 
-    # prepare trace-preservation vector
+    # prepare trace-preservation projection
     if enforce_tp:
-        I = np.eye(d, dtype=complex)
-        order = "F" if vec_convention == "col" else "C"
-        u = I.reshape(d2, order=order)
-        # normalize to unit HS norm
-        u = u / np.linalg.norm(u)
-        # project each time slice
-        for n in range(n_t):
-            # compute bra_I @ K = u^† K (row vector)
-            violation = u.conj().T @ K[n]
-            K[n] = K[n] - np.outer(u, violation)
+        from fmonz.utils.constraints import project_trace_preserving
 
-    # hermiticity preservation: enforce K_{ij} = conj(K_{i'j'})
+        for n in range(n_t):
+            K[n] = project_trace_preserving(K[n], d, vec_convention=vec_convention)
+
     if enforce_hp:
-        # precompute index pairs mapping
-        # for column stacking, index = a + b*d
-        def unravel(idx):
-            if vec_convention == "col":
-                return idx % d, idx // d
-            else:
-                return idx // d, idx % d
+        from fmonz.utils.constraints import project_hermiticity_preserving
 
         for n in range(n_t):
-            M = K[n]
-            Mnew = M.copy()
-            for i in range(d2):
-                a1, a2 = unravel(i)
-                ip = a2 + a1 * d if vec_convention == "col" else a2 * d + a1
-                for j in range(d2):
-                    b1, b2 = unravel(j)
-                    jp = b2 + b1 * d if vec_convention == "col" else b2 * d + b1
-                    Mnew[i, j] = 0.5 * (M[i, j] + np.conj(M[ip, jp]))
-            K[n] = Mnew
+            K[n] = project_hermiticity_preserving(K[n], d, vec_convention=vec_convention)
 
     return K
 

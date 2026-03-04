@@ -58,6 +58,34 @@ n_steps = 5
         text=True,
     )
     assert proc.returncode == 0, proc.stderr
+    assert proc.returncode == 0, proc.stderr
+
+    # also try with the QuTiP backend if available; it should produce the
+    # same set of output files (the dynamics are trivial given the toy
+    # Hamiltonian, so we don't check their contents).
+    try:
+        import qutip  # noqa: F401
+    except ImportError:
+        # nothing to do when qutip is missing
+        pass
+    else:
+        outdir2 = tmp_path / "results2"
+        proc2 = subprocess.run(
+            [sys.executable, str(script), "--config", str(cfgfile), "--outdir", str(outdir2)],
+            cwd=str(script.parent.parent),
+            capture_output=True,
+            text=True,
+        )
+        assert proc2.returncode == 0, proc2.stderr
+        for fname in [
+            "Lambda.npz",
+            "dLambda.npz",
+            "K_raw.npz",
+            "K_reg.npz",
+            "L_markov.npz",
+            "validation_report.json",
+        ]:
+            assert (outdir2 / fname).exists(), f"missing {fname}"
     # expected outputs
     for fname in [
         "Lambda.npz",
@@ -69,3 +97,55 @@ n_steps = 5
         "kernel_norm.png",
     ]:
         assert (outdir / fname).exists(), f"missing {fname}"
+
+
+def run_script(script, cfgfile, tmp_path):
+    outdir = tmp_path / "out"
+    proc = subprocess.run(
+        [sys.executable, str(script), "--config", str(cfgfile), "--outdir", str(outdir), "--use-dummy"],
+        cwd=str(script.parent.parent),
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr
+    return outdir
+
+
+def test_reconstruct_script(tmp_path):
+    # reuse minimal config from above
+    config_text = """
+[system]
+d = 2
+site_energies = [0.0, 0.0]
+couplings = [[0.0, 0.0],[0.0, 0.0]]
+
+[bath]
+temperature = 300.0
+reorganization_energy = 1.0
+cutoff = 50.0
+hierarchy_depth = 1
+matsubara_terms = 0
+
+[time]
+dt = 0.1
+n_steps = 5
+"""
+    cfgfile = tmp_path / "config.toml"
+    cfgfile.write_text(config_text)
+
+    script = Path(__file__).parents[1] / "scripts" / "run_reconstruct_map.py"
+    outdir = run_script(script, cfgfile, tmp_path)
+    assert (outdir / "Lambda.npz").exists()
+
+
+def test_smoke_script(tmp_path):
+    # the smoke script uses its own example config when none provided
+    script = Path(__file__).parents[1] / "scripts" / "run_heom_smoke.py"
+    # run it once just to ensure it executes without error
+    proc = subprocess.run(
+        [sys.executable, str(script), "--use-dummy"],
+        cwd=str(script.parent.parent),
+        capture_output=True,
+        text=True,
+    )
+    assert proc.returncode == 0, proc.stderr

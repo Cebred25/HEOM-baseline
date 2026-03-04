@@ -3,25 +3,6 @@
 This module defines structured dataclasses for the various pieces of
 input needed by the pipeline.  A TOML (or YAML conversion) file can be
 read via :func:`load_config` to obtain a :class:`FullConfig` instance.
-The schema roughly matches the description in the project goal:
-
-```
-[system]
-d = 7
-site_energies = [ ... ]
-couplings = [ [...], ... ]
-
-[bath]
-temperature = 300.0
-reorganization_energy = 35.0
-cutoff = 50.0
-hierarchy_depth = 4
-matsubara_terms = 2
-
-[time]
-dt = 0.1
-n_steps = 1001
-```
 """
 
 from __future__ import annotations
@@ -38,15 +19,24 @@ class SystemConfig:
     couplings: np.ndarray
 
 
-
 @dataclass
 class BathParams:
+    """Parameters describing a bosonic bath used by HEOM solvers.
+
+    The naming follows the convention in the QuTiP documentation when
+    possible.  Older code in the repository still refers to the more
+    verbose names ``temperature``, ``reorg_energy`` and ``cutoff``; those
+    fields are retained for backwards compatibility.  The additional
+    options are used only by the QuTiP backend.
+    """
+
     temperature: float
     reorg_energy: float
     cutoff: float
     hierarchy_depth: int
     matsubara_terms: int = 0
-
+    use_pade: bool = False
+    add_terminator: bool = True
 
 
 @dataclass
@@ -61,7 +51,6 @@ class TimeGrid:
     @property
     def times(self) -> np.ndarray:
         return np.linspace(0, self.t_max, self.n_steps)
-
 
 
 @dataclass
@@ -101,6 +90,8 @@ def load_config(path: str) -> FullConfig:
             cutoff=float(bath["cutoff"]),
             hierarchy_depth=int(bath["hierarchy_depth"]),
             matsubara_terms=int(bath.get("matsubara_terms", 0)),
+            use_pade=bool(bath.get("use_pade", False)),
+            add_terminator=bool(bath.get("add_terminator", True)),
         ),
         time=TimeGrid(
             dt=float(time["dt"]),
